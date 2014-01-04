@@ -10,9 +10,9 @@ This software written for Windows in [JScript .NET](http://en.wikipedia.org/wiki
 allows to quickly connect via SSH to a VirtualBox instance using its name.
 
 [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/) is required for
-the SSH connection and must be in the same directory (or in the `PATH`
-environment variable). The simpliest solution is to place a shortcut to your
-PuTTY executable into the program directory.
+the SSH connection and must be in the same directory as the program (or in the
+`PATH` environment variable). The simpliest solution is to place a shortcut
+to your PuTTY executable into the program directory.
 
 Usage
 -----
@@ -32,7 +32,7 @@ Getting Started
 ---------------
 
 1. Compile the executable with Microsoft JScript .NET compiler. A common
-   compilation command is provided in `make.bat` but you may will to adapt
+   compilation command is provided in `make.bat` but you may want to adapt
    it with your actual Microsoft .NET version and location.
 
 1. Setup your VirtualBox instances to have a SSH server working, a user
