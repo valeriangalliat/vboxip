@@ -88,16 +88,33 @@ function getBoxIp(name, num) {
   return matches[1];
 }
 
+function findFile(name) {
+  if (File.Exists(name)) {
+    return name;
+  }
+
+  MessageBox.Show(AppDomain.CurrentDomain.BaseDirectory);
+
+  if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + '\\' + name)) {
+    return AppDomain.CurrentDomain.BaseDirectory + '\\' + name;
+  }
+
+  var paths = System.Environment.GetEnvironmentVariable('PATH').split(';');
+
+  for (var i = 0, len = paths.length; i < len; i++) {
+    if (File.Exists(paths[i] + '\\' + name)) {
+      return paths[i] + '\\' + name;;
+    }
+  }
+
+  throw 'Unable to find \'' + name + '\'.';
+}
+
 function main(args) {
   try {
     var params = parseArgs(args);
     var ip = getBoxIp(params.name, params.num);
-
-    if (!File.Exists('putty.exe')) {
-      throw 'Unable to find the PuTTY executable.';
-    }
-
-    start('putty.exe', ['-pw', params.user, params.user + '@' + ip]);
+    start(findFile('putty.exe'), ['-pw', params.user, params.user + '@' + ip]);
   } catch (e) {
     MessageBox.Show(e);
     return 1;

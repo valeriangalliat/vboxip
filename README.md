@@ -10,9 +10,10 @@ This software written for Windows in [JScript .NET](http://en.wikipedia.org/wiki
 allows to quickly connect via SSH to a VirtualBox instance using its name.
 
 [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/) is required for
-the SSH connection and must be in the same directory as the program (or in the
-`PATH` environment variable). The simpliest solution is to place a shortcut
-to your PuTTY executable into the program directory.
+the SSH connection and must be in the current working directory, the same
+directory as the program or in the `PATH` environment variable. The simpliest
+solution is to place a shortcut to your PuTTY executable next to the `sshbox.exe`
+program.
 
 Usage
 -----
@@ -41,6 +42,9 @@ Getting Started
 
 1. Prepare some shortcuts to automate the connexion into your boxes, like
    `sshbox-example.bat`.
+
+1. Make sure PuTTY is available in the `PATH` or with a shortcut in the
+   executable directory or the batch file directory.
 
 1. With the instance working, run your newly created shortcut to quick open
    a SSH connection on the box!
