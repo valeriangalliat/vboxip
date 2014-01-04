@@ -41,3 +41,6 @@ Getting Started
 
 1. Prepare some batch scripts to automate the connexion into your boxes, like
    `sshbox-example.bat`.
+
+1. With the instance working, run your newly created batch file to quick open
+   a SSH connection on the box!
