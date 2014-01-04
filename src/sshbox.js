@@ -93,8 +93,6 @@ function findFile(name) {
     return name;
   }
 
-  MessageBox.Show(AppDomain.CurrentDomain.BaseDirectory);
-
   if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + '\\' + name)) {
     return AppDomain.CurrentDomain.BaseDirectory + '\\' + name;
   }
