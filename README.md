@@ -39,23 +39,18 @@ Getting Started
    with the same password as its name, and the host-only adapter properly
    configured (with the VirtualBox Guest Additions installed).
 
-1. Prepare some batch scripts to automate the connexion into your boxes, like
+1. Prepare some shortcuts to automate the connexion into your boxes, like
    `sshbox-example.bat`.
 
-1. With the instance working, run your newly created batch file to quick open
+1. With the instance working, run your newly created shortcut to quick open
    a SSH connection on the box!
 
 Error Handling
 --------------
 
-- If PuTTY is not found in the current directory or in the `PATH` environment
-  variable, the program will crash miserably.
-
 - Any error with the SSH user, password or host will be delegated to PuTTY
   (like a network problem, wrong user or password).
 
-- If the box name does not exists the error handling is delegated to VirtualBox
-  (it will more likely display a message in the console).
-
-- If the IP cannot be extracted (not configured for example), a simple error
-  message will be displayed in the console.
+- All other errors will be displayed in a message box, like when the box name
+  does not exists, the IP is not accessible, or the PuTTY executable is not
+  found.
