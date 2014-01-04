@@ -44,3 +44,18 @@ Getting Started
 
 1. With the instance working, run your newly created batch file to quick open
    a SSH connection on the box!
+
+Error Handling
+--------------
+
+- If PuTTY is not found in the current directory or in the `PATH` environment
+  variable, the program will crash miserably.
+
+- Any error with the SSH user, password or host will be delegated to PuTTY
+  (like a network problem, wrong user or password).
+
+- If the box name does not exists the error handling is delegated to VirtualBox
+  (it will more likely display a message in the console).
+
+- If the IP cannot be extracted (not configured for example), a simple error
+  message will be displayed in the console.
