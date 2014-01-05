@@ -1,0 +1,2 @@
+VBoxManage=VBoxManage.exe
+putty=putty.exe

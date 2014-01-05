@@ -1,6 +1,7 @@
 import System;
 import System.IO;
 import System.Windows.Forms;
+import IWshRuntimeLibrary;
 
 function parseArgs(args) {
   if (args.length < 3) {
@@ -24,12 +25,58 @@ function parseArgs(args) {
   return {user: user, name: name, num: num};
 }
 
+function parseConfig(name) {
+  var config = {
+    VBoxManage: 'VBoxManage.exe',
+    putty: 'putty.exe'
+  };
+
+  name = AppDomain.CurrentDomain.BaseDirectory + '\\' + name;
+
+  if (!File.Exists(name)) {
+    // No config file
+    return config;
+  }
+
+  var lines = File.ReadAllLines(name);
+
+  for (var i = 0, len = lines.length; i < len; i++) {
+    var parts = lines[i].split('=', 2);
+
+    if (parts.length !== 2) {
+      // Line is not valid
+      continue;
+    }
+
+    if (!(parts[0] in config)) {
+      // Key is not valid
+      continue;
+    }
+
+    config[parts[0]] = parts[1];
+  }
+
+  return config;
+}
+
 function argsToString(args) {
   for (var i = 0, len = args.length; i < len; i++) {
     args[i] = '"' + args[i].replace('"', '""') + '"';
   }
 
   return args.join(' ');
+}
+
+function tryStartProcess(process) {
+  try {
+    process.Start();
+  } catch (e) {
+    if ('' + e === 'Error: The system cannot find the file specified') {
+      throw 'Unable to find \'' + process.StartInfo.FileName + '\'.';
+    }
+
+    throw e;
+  }
 }
 
 function invoke(program, args) {
@@ -40,7 +87,7 @@ function invoke(program, args) {
   process.StartInfo.RedirectStandardError = true;
   process.StartInfo.FileName = program;
   process.StartInfo.Arguments = argsToString(args);
-  process.Start();
+  tryStartProcess(process);
   process.WaitForExit();
 
   if (process.ExitCode !== 0) {
@@ -54,18 +101,18 @@ function start(program, args) {
   var process = new System.Diagnostics.Process();
   process.StartInfo.FileName = program;
   process.StartInfo.Arguments = argsToString(args);
-  process.Start();
+  tryStartProcess(process);
 }
 
 function trim(str) {
   return str.replace(/^\s+/, '').replace(/\s+$/, '');
 }
 
-function getBoxIp(name, num) {
+function getBoxIp(manage, name, num) {
   var output = null;
 
   try {
-    output = invoke('\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe', [
+    output = invoke(manage, [
       'guestproperty',
       'get',
       name,
@@ -88,31 +135,12 @@ function getBoxIp(name, num) {
   return matches[1];
 }
 
-function findFile(name) {
-  if (File.Exists(name)) {
-    return name;
-  }
-
-  if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + '\\' + name)) {
-    return AppDomain.CurrentDomain.BaseDirectory + '\\' + name;
-  }
-
-  var paths = System.Environment.GetEnvironmentVariable('PATH').split(';');
-
-  for (var i = 0, len = paths.length; i < len; i++) {
-    if (File.Exists(paths[i] + '\\' + name)) {
-      return paths[i] + '\\' + name;;
-    }
-  }
-
-  throw 'Unable to find \'' + name + '\'.';
-}
-
 function main(args) {
   try {
     var params = parseArgs(args);
-    var ip = getBoxIp(params.name, params.num);
-    start(findFile('putty.exe'), ['-pw', params.user, params.user + '@' + ip]);
+    var config = parseConfig('sshbox.txt');
+    var ip = getBoxIp(config.VBoxManage, params.name, params.num);
+    start(config.putty, ['-pw', params.user, params.user + '@' + ip]);
   } catch (e) {
     MessageBox.Show(e);
     return 1;
