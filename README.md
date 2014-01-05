@@ -34,7 +34,7 @@ Getting Started
    configured (with the VirtualBox Guest Additions installed).
 
 1. Prepare some shortcuts to automate the connexion into your boxes, like
-   `sshbox-example` scripts in the plateform branches.
+   the scripts in the `demo` folder in plateform branches.
 
 1. With the instance working, run your newly created shortcut to quick open
    a SSH connection on the box!
