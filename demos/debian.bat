@@ -1,1 +1,1 @@
-bin\sshbox.exe debian Debian 1
+..\bin\sshbox.exe debian Debian 1
