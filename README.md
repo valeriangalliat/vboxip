@@ -26,5 +26,5 @@ Compilation
 
 You can compile the executable with Microsoft JScript .NET compiler.
 
-A generic compilation command is provided in `make.bat` but you may want to
+A generic compilation command is provided in `build.bat` but you may want to
 adapt it with your actual Microsoft .NET version and location.
