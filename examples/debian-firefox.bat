@@ -1,1 +1,1 @@
-..\bin\sshbox.exe debian Debian 1 firefox $i
+..\bin\vboxip.exe Debian 1 firefox {}

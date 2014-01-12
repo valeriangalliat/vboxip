@@ -1,60 +1,17 @@
-VBoxExec
-========
+VirtualBox IP
+=============
 
-Execute a command with dynamic VirtualBox instance variables.
+Execute a program with dynamic VirtualBox IP variable.
 
 Description
 -----------
 
-This software available for Microsoft Windows and GNU/Linux allows to quickly
-execute a system command with dynamic variables provied from a VirtualBox instance.
+This software will retrieve a VirtualBox instance IP regarding of the given
+parameters and will execute a program by passing it the IP.
 
-Usage
------
-
-The `sshbox` program takes 3 arguments:
-
-1. SSH user (must have the same password).
-1. Virtual machine name.
-1. Network interface number (0 by default).
-
-For example the `sshbox debian Debian 1` command will try to open a SSH
-connexion on a VirtualBox instance named `Debian` with the user `debian`
-(having the password `debian`) and using the virtual machine second network
-interface to get the right IP for the host-only connection.
-
-Getting Started
----------------
-
-1. If on Microsoft Windows, watch the compilation instructions in the
-   `windows` branch.
-
-1. Setup your VirtualBox instances to have a SSH server working, a user
-   with the same password as its name, and the host-only adapter properly
-   configured (with the VirtualBox Guest Additions installed).
-
-1. Prepare some shortcuts to automate the connexion into your boxes, like
-   in the `examples` folder in plateform branches.
-
-1. With the instance working, run your newly created shortcut to quick open
-   a SSH connection on the box!
-
-Error Handling
---------------
-
-- Any error with the SSH user, password or host will be delegated to the
-  SSH client.
-
-- All other errors will be displayed in a message box (on Microsoft Windows)
-  or in the standard error stream (on GNU/Linux), like when the box name
-  does not exists, the IP is not accessible, or the PuTTY executable is not
-  found.
-
-
-SSHBox for Microsoft Windows
-============================
-
-Please refer to the `master` branch for generic documentation.
+A config file can be provided to define some paths like the absolute path
+to `VBoxManage.exe` (required), and other paths that will be dynamically
+replaced in the proxy arguments. Watch examples for more details.
 
 Dependencies
 ------------
@@ -63,28 +20,50 @@ This software is written in [JScript .NET](http://en.wikipedia.org/wiki/JScript_
 and therefore requires the .NET framework to be installed and the Microsoft
 JScript .NET compiler available.
 
+A generic compilation command is provided in `build.bat` but you may want to
+adapt it with your actual Microsoft .NET version and location.
+
 Obviously VirtualBox needs to be installed, and the `VBoxManage.exe` file must
 be present.
 
-[PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/) is required to
-handle the SSH connections.
+Usage
+-----
 
-Configuration
--------------
+The `vboxip.exe` program takes at least 3 arguments:
 
-You can configure the `VBoxManage.exe` and `putty.exe` paths in a `sshbox.txt`
-file next to the executable (like the one in `bin` directory). This file is
-self-explanatory.
+1. Virtual machine name.
+1. Network interface number.
+1. Program to execute.
 
-The example file has got the default values (look in current directory or
-`PATH`) but you can specify the absolute path to the executables.
+All other arguments will be passed to the program to execute, replacing `{}`
+with the current IP.
 
-If no configuration file is present, the executables are looked in `PATH`.
+Also the paths provided in `vboxip.txt` next to the executable file are
+dynamically replaced in the parameters.
 
-Compilation
------------
+Errors
+------
 
-You can compile the executable with Microsoft JScript .NET compiler.
+All other errors will be displayed in a message box, like when the box name
+does not exists or the IP is not accessible.
 
-A generic compilation command is provided in `build.bat` but you may want to
-adapt it with your actual Microsoft .NET version and location.
+Example
+-------
+
+A default `vboxip.txt` is provided in the `bin` directory, with the variables
+I use for my Windows installation, but you will probably have to adapt it.
+
+The following examples are assuming the `vboxip.txt` contains a `firefox` key
+with the absolute path to Firefox.
+
+The `sshbox.exe Debian 1 firefox {}` command will replace `firefox` by the
+absolute Firefox path and will replace `{}` by the `Debian` instance IP on the
+second network interface.
+
+The `sshbox.exe Debian 1 firefox.exe {}/foo` command will not replace
+`firefox.exe` (because the argument is not exactly `firefox`), but the `{}/foo`
+part will be properly expanded with the instance IP.
+
+Also some example files are provided in the `examples` directory, one to open
+the IP in Firefox, and the second to SSH with PuTTY with a given user and
+password on the instance.

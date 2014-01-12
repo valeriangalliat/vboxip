@@ -1,1 +1,1 @@
-..\bin\sshbox.exe debian Debian 1 putty -pw $u $u@$i
+..\bin\vboxip.exe Debian 1 putty -pw debian debian@{}

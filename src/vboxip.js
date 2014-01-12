@@ -4,14 +4,13 @@ import System.Windows.Forms;
 import IWshRuntimeLibrary;
 
 function parseArgs(args) {
-  if (args.length < 5) {
+  if (args.length < 4) {
     throw 'Not enough arguments.';
   }
 
-  var user = args[1];
-  var name = args[2];
-  var num = args[3];
-  var proxy = args.slice(4);
+  var name = args[1];
+  var num = args[2];
+  var proxy = args.slice(3);
 
   if (!/^0|1|2|3$/.test(num)) {
     throw 'The interface number must be between 0 and 3 (included).';
@@ -19,16 +18,13 @@ function parseArgs(args) {
 
   num = +num;
 
-  return {user: user, name: name, num: num, proxy: proxy};
+  return {name: name, num: num, proxy: proxy};
 }
 
 function parseConfig(name) {
-  var config = {
-    VBoxManage: 'VBoxManage.exe',
-    putty: 'putty.exe'
-  };
+  var config = {VBoxManage: 'VBoxManage.exe'};
 
-  name = AppDomain.CurrentDomain.BaseDirectory + '\\' + name;
+  name = AppDomain.CurrentDomain.BaseDirectory + name;
 
   if (!File.Exists(name)) {
     // No config file
@@ -45,31 +41,24 @@ function parseConfig(name) {
       continue;
     }
 
-    if (!(parts[0] in config)) {
-      // Key is not valid
-      continue;
-    }
-
     config[parts[0]] = parts[1];
   }
 
   return config;
 }
 
-function parseProxy(args, replace) {
-  var proxy = [];
-
+function parseProxy(args, paths, ip) {
   for (var i = 0; i < args.length; i++) {
-    var arg = args[i];
-
-    for (var j in replace) {
-      arg = arg.replace(j, replace[j]);
+    if (args[i] in paths) {
+      // Matching expand path
+      args[i] = paths[args[i]];
+      continue;
     }
 
-    proxy.push(arg);
+    args[i] = args[i].replace('{}', ip);
   }
 
-  return proxy;
+  return args;
 }
 
 function argsToString(args) {
@@ -163,15 +152,9 @@ function getBoxIp(manage, name, num) {
 function main(args) {
   try {
     var params = parseArgs(args);
-    var config = parseConfig('sshbox.txt');
+    var config = parseConfig('vboxip.txt');
     var ip = getBoxIp(config.VBoxManage, params.name, params.num);
-
-    var proxy = parseProxy(params.proxy, merge([config, {
-      $u: params.user,
-      $n: params.name,
-      $i: ip
-    }]));
-
+    var proxy = parseProxy(params.proxy, config, ip);
     start(proxy[0], proxy.slice(1));
   } catch (e) {
     MessageBox.Show(e);
