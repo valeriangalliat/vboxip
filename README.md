@@ -41,12 +41,6 @@ with the current IP.
 Also the paths provided in `vboxip.txt` next to the executable file are
 dynamically replaced in the parameters.
 
-Errors
-------
-
-All other errors will be displayed in a message box, like when the box name
-does not exists or the IP is not accessible.
-
 Example
 -------
 
