@@ -23,13 +23,13 @@ JScript .NET compiler available.
 A generic compilation command is provided in `build.bat` but you may want to
 adapt it with your actual Microsoft .NET version and location.
 
-Obviously VirtualBox needs to be installed, and the `VBoxManage.exe` file must
+VirtualBox needs to be installed, and the `VBoxManage.exe` file must
 be present.
 
 Usage
 -----
 
-The `vboxip.exe` program takes at least 3 arguments:
+The `vboxip.exe` program takes at least 3 arguments.
 
 1. Virtual machine name.
 1. Network interface number.
