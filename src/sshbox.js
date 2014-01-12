@@ -4,25 +4,22 @@ import System.Windows.Forms;
 import IWshRuntimeLibrary;
 
 function parseArgs(args) {
-  if (args.length < 3) {
+  if (args.length < 5) {
     throw 'Not enough arguments.';
   }
 
   var user = args[1];
   var name = args[2];
-  var num = 0;
+  var num = args[3];
+  var proxy = args.slice(4);
 
-  if (args.length > 3) {
-    num = args[3];
-
-    if (!/^0|1|2|3$/.test(num)) {
-      throw 'The interface number must be between 0 and 3 (included).';
-    }
-
-    num = +num;
+  if (!/^0|1|2|3$/.test(num)) {
+    throw 'The interface number must be between 0 and 3 (included).';
   }
 
-  return {user: user, name: name, num: num};
+  num = +num;
+
+  return {user: user, name: name, num: num, proxy: proxy};
 }
 
 function parseConfig(name) {
@@ -40,7 +37,7 @@ function parseConfig(name) {
 
   var lines = File.ReadAllLines(name);
 
-  for (var i = 0, len = lines.length; i < len; i++) {
+  for (var i = 0; i < lines.length; i++) {
     var parts = lines[i].split('=', 2);
 
     if (parts.length !== 2) {
@@ -59,8 +56,24 @@ function parseConfig(name) {
   return config;
 }
 
+function parseProxy(args, replace) {
+  var proxy = [];
+
+  for (var i = 0; i < args.length; i++) {
+    var arg = args[i];
+
+    for (var j in replace) {
+      arg = arg.replace(j, replace[j]);
+    }
+
+    proxy.push(arg);
+  }
+
+  return proxy;
+}
+
 function argsToString(args) {
-  for (var i = 0, len = args.length; i < len; i++) {
+  for (var i = 0; i < args.length; i++) {
     args[i] = '"' + args[i].replace('"', '""') + '"';
   }
 
@@ -108,6 +121,18 @@ function trim(str) {
   return str.replace(/^\s+/, '').replace(/\s+$/, '');
 }
 
+function merge(objects) {
+  var object = {};
+
+  for (var i = 0; i < objects.length; i++) {
+    for (var j in objects[i]) {
+      object[j] = objects[i][j];
+    }
+  }
+
+  return object;
+}
+
 function getBoxIp(manage, name, num) {
   var output = null;
 
@@ -140,7 +165,14 @@ function main(args) {
     var params = parseArgs(args);
     var config = parseConfig('sshbox.txt');
     var ip = getBoxIp(config.VBoxManage, params.name, params.num);
-    start(config.putty, ['-pw', params.user, params.user + '@' + ip]);
+
+    var proxy = parseProxy(params.proxy, merge([config, {
+      $u: params.user,
+      $n: params.name,
+      $i: ip
+    }]));
+
+    start(proxy[0], proxy.slice(1));
   } catch (e) {
     MessageBox.Show(e);
     return 1;
