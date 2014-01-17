@@ -26,10 +26,8 @@ adapt it with your actual Microsoft .NET version and location.
 VirtualBox needs to be installed, and the `VBoxManage.exe` file must
 be present.
 
-Usage
------
-
-The `vboxip.exe` program takes at least 3 arguments.
+Options
+-------
 
 1. Virtual machine name.
 1. Network interface number.
