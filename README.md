@@ -39,8 +39,8 @@ with the current IP.
 Also the paths provided in `vboxip.txt` next to the executable file are
 dynamically replaced in the parameters.
 
-Example
--------
+Examples
+--------
 
 A default `vboxip.txt` is provided in the `bin` directory, with the variables
 I use for my Windows installation, but you will probably have to adapt it.
