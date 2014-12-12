@@ -1,7 +1,7 @@
 VirtualBox IP
 =============
 
-Execute a program with dynamic VirtualBox IP variable.
+> Execute a program with dynamic VirtualBox IP variable.
 
 Description
 -----------
@@ -26,8 +26,8 @@ adapt it with your actual Microsoft .NET version and location.
 VirtualBox needs to be installed, and the `VBoxManage.exe` file must
 be present.
 
-Options
--------
+Arguments
+---------
 
 1. Virtual machine name.
 1. Network interface number.
@@ -48,11 +48,11 @@ I use for my Windows installation, but you will probably have to adapt it.
 The following examples are assuming the `vboxip.txt` contains a `firefox` key
 with the absolute path to Firefox.
 
-The `sshbox.exe Debian 1 firefox {}` command will replace `firefox` by the
+The `vboxip.exe Debian 1 firefox {}` command will replace `firefox` by the
 absolute Firefox path and will replace `{}` by the `Debian` instance IP on the
 second network interface.
 
-The `sshbox.exe Debian 1 firefox.exe {}/foo` command will not replace
+The `vboxip.exe Debian 1 firefox.exe {}/foo` command will not replace
 `firefox.exe` (because the argument is not exactly `firefox`), but the `{}/foo`
 part will be properly expanded with the instance IP.
 
